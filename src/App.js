@@ -46,7 +46,10 @@ const App = () => {
   useEffect(() => {
     fetchProducts();
     fetchCart();
+  
   }, []);
+
+
 
   console.log(cart);
 

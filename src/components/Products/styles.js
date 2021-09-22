@@ -1,4 +1,4 @@
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles,alpha } from '@material-ui/core/styles';
 
 export default makeStyles((theme) => ({
   toolbar: theme.mixins.toolbar,
@@ -10,4 +10,12 @@ export default makeStyles((theme) => ({
   root: {
     flexGrow: 1,
   },
+  search: {
+  
+    borderRadius: 12,
+  },
+  searchDiv: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  }
 }));

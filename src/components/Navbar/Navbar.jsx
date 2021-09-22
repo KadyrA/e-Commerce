@@ -17,9 +17,7 @@ const Navbar = ({ totalItems }) => {
                        <img src={logo} alt="Commerce.js" height="45px" className={classes.image} />
                        E-Store
                    </Typography>
-                   <div className={classes.searchBox}> 
-                       <input type="text" placeholder="Search..."/>
-                   </div>
+                  
                    <div className={classes.grow} />
                    {location.pathname==="/" && (
                    <div className={classes.button}>
