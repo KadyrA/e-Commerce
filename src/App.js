@@ -8,11 +8,17 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 const App = () => {
   const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [cart, setCart] = useState({});
 
   const fetchProducts = async () => {
     const { data } = await commerce.products.list();
     setProducts(data);
+  };
+
+  const fetchCategories = async () => {
+    const { data } = await commerce.categories.list();
+    setCategories(data);
   };
 
   const fetchCart = async () => {
@@ -45,8 +51,9 @@ const App = () => {
 
   useEffect(() => {
     fetchProducts();
+    fetchCategories();
     fetchCart();
-  
+
   }, []);
 
 
@@ -59,7 +66,7 @@ const App = () => {
         <Navbar totalItems={cart.total_items} />
         <Switch>
           <Route exact path="/">
-            <Products products={products} onAddToCart={handleAddToCart} />
+            <Products products={products} onAddToCart={handleAddToCart} categories={categories} />
           </Route>
           <Route exact path="/cart">
             <Cart

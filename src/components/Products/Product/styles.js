@@ -9,6 +9,7 @@ export default makeStyles(() => ({
   media: {
     height: 0,
     paddingTop: '56.25%', // 16:9
+    objectFit:'scale-down',
   },
   cardActions: {
     display: 'flex',
@@ -18,4 +19,8 @@ export default makeStyles(() => ({
     display: 'flex',
     justifyContent: 'space-between',
   },
+  image: {
+    maxWidth:'100%',
+    maxHeight:'100%',
+  }
 }));
