@@ -2,10 +2,11 @@ import React, { useState, useCallback } from 'react';
 import { Grid } from '@material-ui/core';
 
 import Product from './Product/Product';
+// import Favorite from './Favorite/Favorite';
 import useStyles from './styles';
 
 
-const Products = ({ products, onAddToCart, categories }) => {
+const Products = ({ products, onAddToCart,onAddToFavorite, categories }) => {
     const classes = useStyles();
     const categoryData = [{ id: 'all', name: 'All' }, ...categories]
 
@@ -14,6 +15,7 @@ const Products = ({ products, onAddToCart, categories }) => {
     const [searchedValue, setSearchedValue] = useState('');
 
     console.log('products', products)
+    
     const onSearchValueChanged = useCallback((text) => {
         const inputValue = text.target.value;
         setSearchedValue(inputValue);
@@ -49,7 +51,6 @@ const Products = ({ products, onAddToCart, categories }) => {
             }
             setProductList(newProductList)
         }
-
     }, [products, categories])
 
     return (
@@ -59,20 +60,20 @@ const Products = ({ products, onAddToCart, categories }) => {
             <div className={classes.searchDiv}>
                 <input className={classes.search} type="text" placeholder="Search..." onChange={onSearchValueChanged} value={searchedValue} />
             </div>
-           <div className={classes.categories}>
-           <div className={{ flexDirection: 'row' }}>
-                {categoryData && categoryData.map((item, index) => {
-                    console.log('item', item)
-                    return (
-                        <button className={classes.categoryButtons} onClick={() => onCategorySelection(item)} key={index} >{item.name}</button>
-                    )
-                })}
+            <div className={classes.categories}>
+                <div className={{ flexDirection: 'row' }}>
+                    {categoryData && categoryData.map((item, index) => {
+                        console.log('item', item)
+                        return (
+                            <button className={classes.categoryButtons} onClick={() => onCategorySelection(item)} key={index} >{item.name}</button>
+                        )
+                    })}
+                </div>
             </div>
-           </div>
             <Grid container justifyContent="center" spacing={4}>
                 {productList.map((product) => (
                     <Grid item key={product.id} xs={12} sm={6} md={4} lg={3} >
-                        <Product product={product} onAddToCart={onAddToCart} />
+                        <Product product={product} onAddToCart={onAddToCart} onAddToFavorite={onAddToFavorite} />
                     </Grid>
                 ))}
             </Grid>

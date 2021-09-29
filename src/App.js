@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { commerce } from "./lib/commerce";
-import { Products, Navbar, Cart } from "./components";
+import { Products, Navbar, Cart,Favorite } from "./components";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 // import Products from './components/Products/Products'
 // import Navbar from './components/Navbar/Navbar'
+//import Favorite from './components/Favorite/Favorite';
 
 const App = () => {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [cart, setCart] = useState({});
+  const [favorite, setFavorite] = useState({});
 
   const fetchProducts = async () => {
     const { data } = await commerce.products.list();
@@ -24,6 +26,11 @@ const App = () => {
   const fetchCart = async () => {
     setCart(await commerce.cart.retrieve());
   };
+
+  const fetchFavorite = async () => {
+    setFavorite(await commerce.favorite.retrieve());
+  };
+
 
   const handleAddToCart = async (productId, quantity) => {
     const { cart } = await commerce.cart.add(productId, quantity);
@@ -49,10 +56,28 @@ const App = () => {
     setCart(cart);
   };
 
+  const handleAddToFavorite = async (productId,quantity) => {
+    const { favorite } = await commerce.favorite.add(productId,quantity);
+
+    setFavorite(favorite);
+  };
+  const handleRemoveFromFavorite = async (productId) => {
+    const { favorite } = await commerce.favorite.remove(productId);
+
+    setFavorite(favorite);
+  };
+
+  const handleEmptyFavorite = async () => {
+    const { favorite } = await commerce.favorite.empty();
+
+    setFavorite(favorite);
+  };
+
   useEffect(() => {
     fetchProducts();
     fetchCategories();
     fetchCart();
+    fetchFavorite();
 
   }, []);
 
@@ -63,10 +88,10 @@ const App = () => {
   return (
     <Router>
       <div>
-        <Navbar totalItems={cart.total_items} />
+        <Navbar totalItems={cart.total_items}  favTotalItems ={favorite.total_items}/>
         <Switch>
           <Route exact path="/">
-            <Products products={products} onAddToCart={handleAddToCart} categories={categories} />
+            <Products products={products} onAddToCart={handleAddToCart} onAddToFavorite={handleAddToFavorite} categories={categories} />
           </Route>
           <Route exact path="/cart">
             <Cart
@@ -74,6 +99,13 @@ const App = () => {
               handleUpdateCartQty={handleUpdateCartQty}
               handleRemoveFromCart={handleRemoveFromCart}
               handleEmptyCart={handleEmptyCart}
+            />
+          </Route>
+          <Route exact path="/favorite">
+            <Favorite
+              favorite={favorite}
+              handleRemoveFromFavorite={handleRemoveFromFavorite}
+              handleEmptyFavorite={handleEmptyFavorite}
             />
           </Route>
         </Switch>
