@@ -1,17 +1,40 @@
 import React, { useState, useEffect } from "react";
 import { commerce } from "./lib/commerce";
-import { Products, Navbar, Cart,Favorite } from "./components";
+import { Products, Navbar, Cart } from "./components";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
-// import Products from './components/Products/Products'
-// import Navbar from './components/Navbar/Navbar'
-//import Favorite from './components/Favorite/Favorite';
+const initialState = { likedProducts: JSON.parse(localStorage.getItem('likedProducts')) || null };
+
+function reducer(state, action) {
+  switch (action.type) {
+    case 'like_action':
+      const newState = {
+        ...state,
+        likedProducts: {
+          ...state.likedProducts,
+          [action.payload]: true
+        }
+      }
+      localStorage.setItem('likedProducts', JSON.stringify(newState.likedProducts))
+      return newState;
+    case 'dislike_action':
+      const currentState = { ...state };
+      delete currentState.likedProducts[action.payload];
+      localStorage.setItem('likedProducts', JSON.stringify(currentState.likedProducts))
+      return currentState;
+    default:
+      throw new Error();
+  }
+}
+
 
 const App = () => {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [cart, setCart] = useState({});
-  const [favorite, setFavorite] = useState({});
+
+  // Reducer for like actions
+  const [likeActionState, dispatch] = React.useReducer(reducer, initialState);
 
   const fetchProducts = async () => {
     const { data } = await commerce.products.list();
@@ -26,11 +49,6 @@ const App = () => {
   const fetchCart = async () => {
     setCart(await commerce.cart.retrieve());
   };
-
-  const fetchFavorite = async () => {
-    setFavorite(await commerce.favorite.retrieve());
-  };
-
 
   const handleAddToCart = async (productId, quantity) => {
     const { cart } = await commerce.cart.add(productId, quantity);
@@ -56,42 +74,42 @@ const App = () => {
     setCart(cart);
   };
 
-  const handleAddToFavorite = async (productId,quantity) => {
-    const { favorite } = await commerce.favorite.add(productId,quantity);
-
-    setFavorite(favorite);
+  const handleAddToFavorite = (productId) => {
+    dispatch({
+      type: 'like_action',
+      payload: productId
+    })
   };
-  const handleRemoveFromFavorite = async (productId) => {
-    const { favorite } = await commerce.favorite.remove(productId);
-
-    setFavorite(favorite);
-  };
-
-  const handleEmptyFavorite = async () => {
-    const { favorite } = await commerce.favorite.empty();
-
-    setFavorite(favorite);
+  const handleRemoveFromFavorite = (productId) => {
+    dispatch({
+      type: 'dislike_action',
+      payload: productId
+    })
   };
 
   useEffect(() => {
     fetchProducts();
     fetchCategories();
     fetchCart();
-    fetchFavorite();
-
   }, []);
 
-
-
-  console.log(cart);
+  //console.log(cart);
 
   return (
     <Router>
       <div>
-        <Navbar totalItems={cart.total_items}  favTotalItems ={favorite.total_items}/>
+        <Navbar totalItems={cart.total_items} favTotalItems={likeActionState && likeActionState.likedProducts ? Object.keys(likeActionState.likedProducts).length : 0} />
         <Switch>
           <Route exact path="/">
-            <Products products={products} onAddToCart={handleAddToCart} onAddToFavorite={handleAddToFavorite} categories={categories} />
+            <Products
+              products={products}
+              onAddToCart={handleAddToCart}
+              onAddToFavorite={handleAddToFavorite}
+              onRemoveFromFavorite={handleRemoveFromFavorite}
+              categories={categories}
+              showLikedProducts={false}
+              likeActionState={likeActionState}
+            />
           </Route>
           <Route exact path="/cart">
             <Cart
@@ -102,10 +120,14 @@ const App = () => {
             />
           </Route>
           <Route exact path="/favorite">
-            <Favorite
-              favorite={favorite}
-              handleRemoveFromFavorite={handleRemoveFromFavorite}
-              handleEmptyFavorite={handleEmptyFavorite}
+            <Products
+              products={products}
+              onAddToCart={handleAddToCart}
+              onAddToFavorite={handleAddToFavorite}
+              onRemoveFromFavorite={handleRemoveFromFavorite}
+              categories={categories}
+              showLikedProducts
+              likeActionState={likeActionState}
             />
           </Route>
         </Switch>

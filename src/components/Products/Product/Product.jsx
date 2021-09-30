@@ -1,11 +1,12 @@
 import React from 'react'
 import { Card, CardMedia, CardContent, CardActions, Typography, IconButton } from '@material-ui/core'
-import { AddShoppingCart, FavoriteBorder } from '@material-ui/icons'
+import { AddShoppingCart, FavoriteBorder, Favorite } from '@material-ui/icons'
 
 import useStyles from './styles';
 
-const Product = ({ product, onAddToCart, onAddToFavorite }) => {
+const Product = ({ product, onAddToCart, onAddToFavorite,likeActionState,onRemoveFromFavorite }) => {
     const classes = useStyles();
+    const isLiked = likeActionState && likeActionState.likedProducts && likeActionState.likedProducts.hasOwnProperty(product.id);
 
     return (
         <Card className={classes.root}>
@@ -22,8 +23,8 @@ const Product = ({ product, onAddToCart, onAddToFavorite }) => {
                 <Typography dangerouslySetInnerHTML={{ __html: product.description }} variant="body2" color="textSecondary" />
             </CardContent>
             <CardActions disableSpacing className={classes.cardActions}>
-                <IconButton aria-label="Add to Favorite" onClick={() => onAddToFavorite(product.id)}>
-                    <FavoriteBorder />
+                <IconButton aria-label="Add to Favorite" onClick={() => isLiked ? onRemoveFromFavorite(product.id) : onAddToFavorite(product.id)}>
+                    {isLiked ? <Favorite /> : <FavoriteBorder />}
                 </IconButton>
                 <IconButton aria-label="Add to Cart" onClick={() => onAddToCart(product.id, 1)}>
                     <AddShoppingCart />

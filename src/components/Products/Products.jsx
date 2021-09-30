@@ -6,7 +6,15 @@ import Product from './Product/Product';
 import useStyles from './styles';
 
 
-const Products = ({ products, onAddToCart,onAddToFavorite, categories }) => {
+const Products = ({ 
+    products, 
+    onAddToCart,
+    onAddToFavorite, 
+    categories,
+    showLikedProducts,
+    likeActionState,
+    onRemoveFromFavorite
+}) => {
     const classes = useStyles();
     const categoryData = [{ id: 'all', name: 'All' }, ...categories]
 
@@ -53,6 +61,7 @@ const Products = ({ products, onAddToCart,onAddToFavorite, categories }) => {
         }
     }, [products, categories])
 
+    console.log('likeActionState',likeActionState)
     return (
         <main className={classes.content}>
 
@@ -71,11 +80,30 @@ const Products = ({ products, onAddToCart,onAddToFavorite, categories }) => {
                 </div>
             </div>
             <Grid container justifyContent="center" spacing={4}>
-                {productList.map((product) => (
-                    <Grid item key={product.id} xs={12} sm={6} md={4} lg={3} >
-                        <Product product={product} onAddToCart={onAddToCart} onAddToFavorite={onAddToFavorite} />
-                    </Grid>
-                ))}
+                {productList.map((product) => {
+                    if(showLikedProducts){
+                        if(likeActionState.likedProducts){
+                            if(likeActionState.likedProducts.hasOwnProperty(product.id)){
+                                return (
+                                    <Grid item key={product.id} xs={12} sm={6} md={4} lg={3} >
+                                        <Product onRemoveFromFavorite={onRemoveFromFavorite} product={product} onAddToCart={onAddToCart} onAddToFavorite={onAddToFavorite} likeActionState={likeActionState}/>
+                                    </Grid>
+                                )
+                            } else {
+                                return null;
+                            }
+                        } else {
+                            return null;
+                        }
+                    } else {
+                        return (
+                            <Grid item key={product.id} xs={12} sm={6} md={4} lg={3} >
+                                <Product onRemoveFromFavorite={onRemoveFromFavorite} product={product} onAddToCart={onAddToCart} onAddToFavorite={onAddToFavorite} likeActionState={likeActionState}/>
+                            </Grid>
+                        )
+                    }
+                    
+                })}
             </Grid>
         </main>
     );

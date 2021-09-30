@@ -21,7 +21,7 @@ const Navbar = ({ totalItems, favTotalItems }) => {
                    <div className={classes.grow} />
                    {location.pathname==="/" && (
                    <div className={classes.button}>
-                       <IconButton component={Link} to="/favorite" aria-label="Show favorite items" color="inherit">
+                       <IconButton  component={Link} to="/favorite"  aria-label="Show favorite items" color="inherit">
                             <Badge badgeContent={favTotalItems} color={'secondary'}>
                                 <Favorite/>
                             </Badge>
