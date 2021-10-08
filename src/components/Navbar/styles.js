@@ -4,8 +4,7 @@ const drawerWidth = 0;
 
 export default makeStyles((theme) => ({
   appBar: {
-    boxShadow: "none",
-    backgroundColor:'#FFA931',
+    backgroundColor:'#f7f7f7',
     borderBottom: "1px solid rgba(0, 0, 0, 0.12)",
     [theme.breakpoints.up("sm")]: {
       width: `calc(100% - ${drawerWidth}px)`,
@@ -13,6 +12,7 @@ export default makeStyles((theme) => ({
     },
   },
   title: {
+    fontFamily: 'Open Sans, Lucida Grande, Lucida Sans Unicode, Veranda, Arial, sans-serif',
     flexGrow: 1,
     alignItems: "center",
     display: "flex",

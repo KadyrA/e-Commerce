@@ -4,7 +4,7 @@ import { AddShoppingCart, FavoriteBorder, Favorite } from '@material-ui/icons'
 
 import useStyles from './styles';
 
-const Product = ({ product, onAddToCart, onAddToFavorite,likeActionState,onRemoveFromFavorite }) => {
+const Product = ({ product, onAddToCart, onAddToFavorite, likeActionState, onRemoveFromFavorite }) => {
     const classes = useStyles();
     const isLiked = likeActionState && likeActionState.likedProducts && likeActionState.likedProducts.hasOwnProperty(product.id);
 
@@ -20,7 +20,7 @@ const Product = ({ product, onAddToCart, onAddToFavorite,likeActionState,onRemov
                         {product.price.formatted_with_code}
                     </Typography>
                 </div>
-                <Typography dangerouslySetInnerHTML={{ __html: product.description }} variant="body2" color="textSecondary" />
+                {/* <Typography dangerouslySetInnerHTML={{ __html: product.description }} variant="body2" color="textSecondary" /> */}
             </CardContent>
             <CardActions disableSpacing className={classes.cardActions}>
                 <IconButton aria-label="Add to Favorite" onClick={() => isLiked ? onRemoveFromFavorite(product.id) : onAddToFavorite(product.id)}>

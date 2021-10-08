@@ -8,7 +8,7 @@ export default makeStyles(() => ({
   },
   media: {
     height: 0,
-    paddingTop: '56.25%', // 16:9
+    paddingTop: '100%', // 16:9 (56.25)
     objectFit:'scale-down',
   },
   cardActions: {
