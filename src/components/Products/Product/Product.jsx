@@ -8,6 +8,8 @@ const Product = ({ product, onAddToCart, onAddToFavorite, likeActionState, onRem
     const classes = useStyles();
     const isLiked = likeActionState && likeActionState.likedProducts && likeActionState.likedProducts.hasOwnProperty(product.id);
 
+    console.log("product", product)
+
     return (
         <Card className={classes.root}>
             <CardMedia className={classes.media} image={product.media.source} title={product.name} />
@@ -20,7 +22,9 @@ const Product = ({ product, onAddToCart, onAddToFavorite, likeActionState, onRem
                         {product.price.formatted_with_code}
                     </Typography>
                 </div>
-                {/* <Typography dangerouslySetInnerHTML={{ __html: product.description }} variant="body2" color="textSecondary" /> */}
+                <Typography dangerouslySetInnerHTML={{ __html: product.description }} variant="body2" color="textSecondary" />
+                {product.inventory.available <= 5 ? (
+                <Typography className={classes.stock}>Last {product.inventory.available} Item(s) </Typography>) : null}
             </CardContent>
             <CardActions disableSpacing className={classes.cardActions}>
                 <IconButton aria-label="Add to Favorite" onClick={() => isLiked ? onRemoveFromFavorite(product.id) : onAddToFavorite(product.id)}>

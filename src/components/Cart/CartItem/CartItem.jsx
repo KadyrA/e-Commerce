@@ -4,7 +4,6 @@ import useStyles from './styles';
 
 const CartItem = ({ item, onUpdateCartQty, onRemoveFromCart }) => {
     const classes = useStyles();
-
     return (
         <Card>
             <CardMedia image={item.media.source} alt={item.name} className={classes.media} />
@@ -20,6 +19,8 @@ const CartItem = ({ item, onUpdateCartQty, onRemoveFromCart }) => {
                 </div>
                 <Button variant="contained" type="button" color="secondary" onClick={() => onRemoveFromCart(item.id)}>Remove</Button>
             </CardActions>
+                {parseInt(item.sku) <= 5 ? (
+                <Typography className={classes.stock}>Last {parseInt(item.sku)} Items </Typography>) : null}
         </Card>
     )
 }

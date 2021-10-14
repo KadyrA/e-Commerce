@@ -15,4 +15,7 @@ export default makeStyles(() => ({
     display: 'flex',
     alignItems: 'center',
   },
+  stock: {
+    color: '#FF0000'
+  },
 }));
